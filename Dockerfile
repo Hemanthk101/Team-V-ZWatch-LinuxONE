@@ -4,4 +4,4 @@ COPY requirements-lock.txt /tmp/requirements-lock.txt
 RUN python -m pip install --no-cache-dir -r /tmp/requirements-lock.txt
 USER 1000
 WORKDIR /workspace
-CMD ["python", "-m", "uvicorn", "app:app", "--host", "0.0.0.0", "--port", "38900", "--workers", "1", "--no-server-header"]
+CMD ["python", "-m", "uvicorn", "app:app", "--host", "127.0.0.1", "--port", "38900", "--workers", "1", "--no-server-header"]

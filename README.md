@@ -44,12 +44,13 @@ The included Dockerfile pins the IBM sample environment image by digest and adds
 ```bash
 docker build -t zwatch:1.0 .
 mkdir -p data
-# Generate a secret outside the source tree and make it readable by the container's UID.
-# Run with a read-only source mount, a writable data mount, no extra capabilities,
-# a bounded process count, CPU/memory limits, and an owner-controlled secret file.
+bash deploy.sh
+# From your workstation, open an encrypted tunnel:
+ssh -N -L 38900:127.0.0.1:38900 -i YOUR_PRIVATE_KEY linux1@YOUR_VM_IP
+# Open http://127.0.0.1:38900 and enter the token stored on the VM in data/.access-token.
 ```
 
-For production, terminate HTTPS with an approved reverse proxy and use organizational SSO/RBAC. The hackathon deployment uses a temporary HTTP endpoint; SSH tunneling is the recommended private access path. All inference and telemetry storage remain on LinuxONE. No cloud AI API or paid model is required.
+The deployment binds to VM loopback and uses an encrypted SSH tunnel for workstation access. `deploy.sh` preserves the data directory while replacing only the named application container. Run it as a user authorized to use Docker. For production multi-user access, terminate HTTPS with an approved reverse proxy and use organizational SSO/RBAC. All inference and telemetry storage remain on LinuxONE. No cloud AI API or paid model is required.
 
 ## Demo in under three minutes
 
