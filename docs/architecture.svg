@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1260" height="340" viewBox="0 0 1260 340">
+<rect width="1260" height="340" fill="#090e18"/>
+<text x="40" y="48" fill="#5aebbf" font-size="27" font-family="Arial">ZWatch / Team V / LinuxONE deployment</text>
+<rect x="40" y="105" width="260" height="100" rx="10" fill="#111a28" stroke="#3c536f"/>
+<text x="56" y="145" fill="white" font-size="18" font-family="Arial">LinuxONE VM counters</text>
+<text x="56" y="176" fill="#93a4bb" font-size="12" font-family="Arial">CPU / memory / disk / network</text>
+<path d="M305 155 h26 l-7 -5 m7 5 l-7 5" fill="none" stroke="#5aebbf" stroke-width="2"/>
+<rect x="340" y="105" width="260" height="100" rx="10" fill="#111a28" stroke="#3c536f"/>
+<text x="356" y="145" fill="white" font-size="18" font-family="Arial">Local inference</text>
+<text x="356" y="176" fill="#93a4bb" font-size="12" font-family="Arial">Isolation Forest + critical guardrails</text>
+<path d="M605 155 h26 l-7 -5 m7 5 l-7 5" fill="none" stroke="#5aebbf" stroke-width="2"/>
+<rect x="640" y="105" width="260" height="100" rx="10" fill="#111a28" stroke="#3c536f"/>
+<text x="656" y="145" fill="white" font-size="18" font-family="Arial">Incident policy</text>
+<text x="656" y="176" fill="#93a4bb" font-size="12" font-family="Arial">3 abnormal / 3 clear samples</text>
+<path d="M905 155 h26 l-7 -5 m7 5 l-7 5" fill="none" stroke="#5aebbf" stroke-width="2"/>
+<rect x="940" y="105" width="260" height="100" rx="10" fill="#111a28" stroke="#3c536f"/>
+<text x="956" y="145" fill="white" font-size="18" font-family="Arial">Operations console</text>
+<text x="956" y="176" fill="#93a4bb" font-size="12" font-family="Arial">FastAPI + SQLite + browser</text>
+<text x="40" y="260" fill="#93a4bb" font-size="16" font-family="Arial">Separate synthetic replay model - replay data never enters live training</text>
+<text x="40" y="292" fill="#93a4bb" font-size="15" font-family="Arial">All telemetry storage and inference stay on LinuxONE. Human review precedes any remediation.</text></svg>

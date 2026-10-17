@@ -1,0 +1,7 @@
+.access-token
+.env
+data/
+__pycache__/
+*.pyc
+.venv/
+*.sqlite*

@@ -1,0 +1,135 @@
+{
+  "dataset": "Held-out synthetic stress replay; not a production accuracy claim",
+  "train_seed": 17,
+  "calibration_seed": 31,
+  "evaluation_seed": 4001,
+  "confirmation_samples": 3,
+  "recovery_samples": 3,
+  "results": [
+    {
+      "scenario": "compound",
+      "title": "Cascading service degradation",
+      "samples": 180,
+      "tp": 61,
+      "fp": 4,
+      "fn": 4,
+      "tn": 111,
+      "precision": 0.9385,
+      "recall": 0.9385,
+      "false_positive_rate": 0.0348,
+      "detected_events": 2,
+      "expected_events": 2,
+      "guardrail_detected_events": 1,
+      "detection_delay_samples": [
+        2,
+        2
+      ],
+      "inference_p95_ms": 6.802
+    },
+    {
+      "scenario": "cpu",
+      "title": "CPU saturation",
+      "samples": 180,
+      "tp": 61,
+      "fp": 4,
+      "fn": 4,
+      "tn": 111,
+      "precision": 0.9385,
+      "recall": 0.9385,
+      "false_positive_rate": 0.0348,
+      "detected_events": 2,
+      "expected_events": 2,
+      "guardrail_detected_events": 2,
+      "detection_delay_samples": [
+        2,
+        2
+      ],
+      "inference_p95_ms": 6.837
+    },
+    {
+      "scenario": "memory",
+      "title": "Memory pressure",
+      "samples": 180,
+      "tp": 61,
+      "fp": 4,
+      "fn": 4,
+      "tn": 111,
+      "precision": 0.9385,
+      "recall": 0.9385,
+      "false_positive_rate": 0.0348,
+      "detected_events": 2,
+      "expected_events": 2,
+      "guardrail_detected_events": 2,
+      "detection_delay_samples": [
+        2,
+        2
+      ],
+      "inference_p95_ms": 6.755
+    },
+    {
+      "scenario": "network",
+      "title": "Network surge",
+      "samples": 180,
+      "tp": 61,
+      "fp": 4,
+      "fn": 4,
+      "tn": 111,
+      "precision": 0.9385,
+      "recall": 0.9385,
+      "false_positive_rate": 0.0348,
+      "detected_events": 2,
+      "expected_events": 2,
+      "guardrail_detected_events": 2,
+      "detection_delay_samples": [
+        2,
+        2
+      ],
+      "inference_p95_ms": 6.812
+    },
+    {
+      "scenario": "disk",
+      "title": "Storage and I/O pressure",
+      "samples": 180,
+      "tp": 61,
+      "fp": 4,
+      "fn": 4,
+      "tn": 111,
+      "precision": 0.9385,
+      "recall": 0.9385,
+      "false_positive_rate": 0.0348,
+      "detected_events": 2,
+      "expected_events": 2,
+      "guardrail_detected_events": 2,
+      "detection_delay_samples": [
+        2,
+        2
+      ],
+      "inference_p95_ms": 6.767
+    },
+    {
+      "scenario": "normal",
+      "title": "Healthy workload control",
+      "samples": 180,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "tn": 180,
+      "precision": 0.0,
+      "recall": 0.0,
+      "false_positive_rate": 0.0,
+      "detected_events": 0,
+      "expected_events": 0,
+      "guardrail_detected_events": 0,
+      "detection_delay_samples": [],
+      "inference_p95_ms": 6.891
+    }
+  ],
+  "runtime": {
+    "architecture": "s390x",
+    "python": "3.12.15",
+    "logical_cpus": 3,
+    "memory_gib": 7.82,
+    "measured_at_utc": "2026-10-17T14:20:40.412+00:00",
+    "measurement_scope": "Python inference inside constrained ZWatch LinuxONE container"
+  }
+}
