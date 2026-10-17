@@ -1,6 +1,8 @@
 import tempfile
 import time
 import unittest
+import threading
+from unittest.mock import patch
 from transaction_lab.service import LabService
 
 
@@ -86,6 +88,27 @@ class RecoveryTests(unittest.TestCase):
         self.assertEqual(self.lab.proposal["status"], "verified")
         self.assertEqual(self.lab.proposal["post_action_bad_requests"], 0)
         self.assertEqual(self.lab.proposal["total_post_action_bad_requests"], 1)
+
+    def test_stopping_load_cannot_overwrite_a_new_session(self):
+        entered, release = threading.Event(), threading.Event()
+
+        def blocked_request(*args, **kwargs):
+            entered.set()
+            release.wait(2)
+            return {"transaction_id": "same", "deduplicated": True}
+
+        with patch("transaction_lab.service.request_json", side_effect=blocked_request):
+            self.lab.start_load(1, 5, "test-operator")
+            self.assertTrue(entered.wait(1))
+            with self.lab.lock:
+                self.lab.load["running"] = False
+            try:
+                with self.assertRaises(ValueError):
+                    self.lab.start_load(1, 5, "test-operator")
+            finally:
+                release.set()
+                self.lab.load_thread.join(2)
+        self.assertFalse(self.lab.load["running"])
 
 
 if __name__ == "__main__":

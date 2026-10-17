@@ -2,6 +2,7 @@ import json
 import os
 import unittest
 import uuid
+import time
 import urllib.error
 import urllib.request
 from pathlib import Path
@@ -114,6 +115,32 @@ class LaboratoryAPITests(unittest.TestCase):
                 {"idempotency_key": key + "-new", "amount_minor": 1.5},
             )
         self.assertEqual(error.exception.code, 422)
+
+    def test_trace_reference_resolves_to_recorded_operations(self):
+        from transaction_lab.common import request_json
+
+        key = "trace-check-" + uuid.uuid4().hex
+        accepted = request_json(
+            "http://127.0.0.1:38901/transactions",
+            "POST",
+            {"idempotency_key": key, "amount_minor": 123},
+        )
+        # This integration suite runs with an idle laboratory, outside benchmarks.
+        deadline = time.monotonic() + 5
+        while time.monotonic() < deadline:
+            status, payload = self.request(
+                "/api/transaction-lab/trace/" + accepted["trace_id"]
+            )
+            self.assertEqual(status, 200)
+            trace = json.loads(payload)
+            if trace["spans"]:
+                break
+            time.sleep(0.05)
+        self.assertEqual(trace["transaction"]["id"], accepted["transaction_id"])
+        self.assertTrue(trace["spans"])
+
+    def test_invalid_trace_id_is_rejected(self):
+        self.assertEqual(self.request("/api/transaction-lab/trace/not-a-trace")[0], 422)
 
 
 if __name__ == "__main__":
