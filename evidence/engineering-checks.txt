@@ -1,0 +1,17 @@
+test_foreign_origin_rejected (test_api.APITests.test_foreign_origin_rejected) ... ok
+test_live_source_and_replay_source_remain_distinct (test_api.APITests.test_live_source_and_replay_source_remain_distinct) ... ok
+test_metrics_require_authentication (test_api.APITests.test_metrics_require_authentication) ... ok
+test_unknown_scenario_rejected (test_api.APITests.test_unknown_scenario_rejected) ... ok
+test_unsupported_export_source_rejected (test_api.APITests.test_unsupported_export_source_rejected) ... ok
+test_confirmation_and_recovery_hysteresis (test_engine.DetectionTests.test_confirmation_and_recovery_hysteresis) ... ok
+test_healthy_control_has_no_confirmed_incident (test_engine.DetectionTests.test_healthy_control_has_no_confirmed_incident) ... ok
+test_invalid_values_rejected (test_engine.DetectionTests.test_invalid_values_rejected) ... ok
+test_multivariate_episode_detected_below_critical_guardrails (test_engine.DetectionTests.test_multivariate_episode_detected_below_critical_guardrails) ... ok
+test_scoring_does_not_mutate_model_baseline (test_engine.DetectionTests.test_scoring_does_not_mutate_model_baseline) ... ok
+test_short_spike_does_not_open_incident (test_engine.DetectionTests.test_short_spike_does_not_open_incident) ... ok
+test_sustained_failures_create_two_distinct_incidents (test_engine.DetectionTests.test_sustained_failures_create_two_distinct_incidents) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 8.211s
+
+OK

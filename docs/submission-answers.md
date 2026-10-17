@@ -38,7 +38,7 @@ https://github.com/Hemanthk101/Team-V-ZWatch-LinuxONE/blob/main/docs/Team-V-ZWat
 
 ## Link to all open-source resources used
 
-https://scikit-learn.org/ ; https://numpy.org/ ; https://github.com/giampaolo/psutil ; https://github.com/fastapi/fastapi ; https://github.com/encode/uvicorn ; https://www.python.org/ ; https://www.sqlite.org/ ; https://github.com/linuxone-community-cloud/jupyter-lab-ml ; https://github.com/heygen-com/hyperframes ; https://www.reportlab.com/opensource/ . Synthetic replay data is generated in this project; live data comes from the LinuxONE VM. AI assisted implementation and documentation.
+https://scikit-learn.org/ ; https://numpy.org/ ; https://github.com/giampaolo/psutil ; https://github.com/fastapi/fastapi ; https://github.com/encode/uvicorn ; https://www.python.org/ ; https://www.sqlite.org/ ; https://github.com/linuxone-community-cloud/jupyter-lab-ml ; https://github.com/heygen-com/hyperframes ; https://www.reportlab.com/opensource/ ; https://ffmpeg.org/ ; https://python-pillow.org/ ; https://gsap.com/ ; https://github.com/psf/black . Synthetic replay data is generated in this project; live data comes from the LinuxONE VM. AI assisted implementation and documentation.
 
 ## Any other document
 

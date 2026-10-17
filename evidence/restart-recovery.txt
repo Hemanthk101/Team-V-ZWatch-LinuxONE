@@ -1,0 +1,5 @@
+Restart recovery: PASS
+Live baseline restored: 120 real observations
+Replay observations restored: 180
+Replay incidents restored: 2
+Incident acknowledgment preserved: PASS
