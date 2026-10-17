@@ -46,6 +46,10 @@ Requires Python 3.12+ on Linux for the live collector.
 python -m venv .venv
 . .venv/bin/activate
 pip install -r requirements.txt
+# Initialize the shared internal key before starting the two lab processes.
+python -c "import transaction_lab.common"
+python -m uvicorn transaction_lab.authapp:app --host 127.0.0.1 --port 38902 &
+python -m uvicorn transaction_lab.labapp:app --host 127.0.0.1 --port 38901 &
 python -m uvicorn app:app --host 127.0.0.1 --port 38900 --workers 1
 ```
 
