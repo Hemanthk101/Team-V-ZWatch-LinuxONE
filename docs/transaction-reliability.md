@@ -67,8 +67,9 @@ monotonic time; wall-clock timestamps remain available for the timeline.
 
 ## Bounded faults
 
-All experiments operate only on laboratory resources and expire in at most 30
-seconds. Pool exhaustion borrows actual connections without returning them;
+All experiments operate only on laboratory resources. Fault configuration is
+capped at 30 seconds; automatic cleanup runs on the 500 ms collector tick, so
+scheduling and observation add latency to the configured duration. Pool exhaustion borrows actual connections without returning them;
 the expiry or approved recovery returns those exact leases. Dependency delay
 adds an asynchronous delay only in the test authorization server. Worker pause
 stops only these six laboratory consumers. None changes VM networking, host
