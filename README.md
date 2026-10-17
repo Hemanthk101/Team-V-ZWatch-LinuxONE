@@ -6,6 +6,10 @@ ZWatch now includes an isolated transaction service, durable queue, separate HTT
 
 **Current implementation:** [transaction reliability design and reproduction](docs/transaction-reliability.md), [remaining implementation stages](docs/implementation-roadmap.md).
 
+![Transaction reliability console running on LinuxONE](docs/transactions-overview.png)
+
+**Measured evidence:** [controlled-service results](docs/transaction-results.md), [raw benchmark](evidence/transaction-benchmark.json), [engineering checks](evidence/transaction-engineering-checks.json), [restart check](evidence/transaction-restart-check.json), [source validation](evidence/transaction-validation.json).
+
 **Original prototype materials:** [v1 pitch deck](docs/Team-V-ZWatch-Pitch.pdf), [v1 architecture](docs/architecture.svg), [synthetic replay evaluation](evidence/evaluation.json), [v1 submission draft](docs/submission-answers.md). These describe the earlier host-monitor prototype; final submission materials will be refreshed after the project is finalized.
 
 The previously recorded v1 video is historical. New video production is on hold until the owner finalizes the project.

@@ -1,0 +1,19 @@
+{
+  "status": "passed",
+  "architecture": "s390x",
+  "pending_before_restart": 24,
+  "correctness_after_restart": {
+    "accepted": 12436,
+    "completed": 12436,
+    "pending": 0,
+    "postings": 12436,
+    "completed_without_posting": 0,
+    "posting_without_completion": 0,
+    "amount_mismatches": 0,
+    "duplicate_postings": 0
+  },
+  "backend_unavailability_http": 503,
+  "incidents_restored": 15,
+  "five_second_fault_automatically_cleared_after_s": 5.598,
+  "note": "Bounded test workload only; abrupt process crash/storage failure is a separate test."
+}

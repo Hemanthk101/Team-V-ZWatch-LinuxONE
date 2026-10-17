@@ -1,0 +1,26 @@
+{
+  "status": "passed",
+  "architecture": "s390x",
+  "python": "3.12.15",
+  "started_at": 1792255735.0810292,
+  "finished_at": 1792255746.8418255,
+  "source_revision": "c07b63919f174843cfd89d0c97782ba6d16d2886",
+  "tests_run": 42,
+  "skipped": 0,
+  "failures": 0,
+  "errors": 0,
+  "source_sha256": {
+    "app.py": "337b0fe408d16da163dab0d3c98e04c9552e91d71365c0179706f1fefe39db2e",
+    "engine.py": "e9e5f0987de35d4767c837a545878db7fef8e1fe1896e618aaac08d07d8d3895",
+    "static/transactions.html": "6ca83e851328d6ebcc022b83937a7e131abc9cf58492903b8956fbe656441217",
+    "static/index.html": "e03bcdf0c66a0b7b5ed01a62ad05af2a09ac0108a5f30ba1119bd9d224bed5cf",
+    "transaction_lab/service.py": "4aca72cfe8cb5599019b66bc08c7b997b375244405c54fb5616a357261002557",
+    "transaction_lab/analysis.py": "4242d3d1913605ccd7a62aac9edb29912021a121d8ea77b55e4b392d3a541c77",
+    "transaction_lab/authapp.py": "8cc3991eb4d75b85c391aa700329acde14752f0474b7358900fd207978d5b742",
+    "transaction_lab/labapp.py": "08e315355881a124fbc1e7ac70b531dd4a0676e034106d23d29a42ede7fdd96d",
+    "transaction_lab/__init__.py": "db5a7632d8e77c17ec8154f7c4a6b12cd63243c4ea4169df5cd0e67ea5c65871",
+    "transaction_lab/ledger.py": "520388e82b7b2358bdf9c2ae0537671343cafc4d5119e8e9ce8c957b8ed603aa",
+    "transaction_lab/common.py": "b038818d4d2b68c0aa2650fce1ae76297a4b05817a5d83362b2203a504401597",
+    "transaction_lab/benchmark.py": "b2f74bd0e71d1e7290fd66f957d71121d313ab38750d79aab12795ceb8f1f8b8"
+  }
+}

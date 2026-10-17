@@ -1,0 +1,70 @@
+{
+  "project": "ZWatch transaction reliability milestone",
+  "team": "Team V",
+  "scope": "Generated HTTP workload and deliberately injected faults in running services; no production/customer data",
+  "source_revision": "c07b63919f174843cfd89d0c97782ba6d16d2886",
+  "source_hashes_match_published_git": true,
+  "engineering_tests": 42,
+  "skipped": 0,
+  "restart_check": "passed",
+  "findings": {
+    "comparisons": [
+      {
+        "method": "host_threshold",
+        "detected": 0,
+        "trials": 9,
+        "median_delay_s": null,
+        "min_delay_s": null,
+        "max_delay_s": null,
+        "healthy_control_alert_observations": 0,
+        "healthy_control_observations": 233
+      },
+      {
+        "method": "service_threshold",
+        "detected": 9,
+        "trials": 9,
+        "median_delay_s": 0.949,
+        "min_delay_s": 0.855,
+        "max_delay_s": 1.601,
+        "healthy_control_alert_observations": 0,
+        "healthy_control_observations": 233
+      },
+      {
+        "method": "slo_burn",
+        "detected": 9,
+        "trials": 9,
+        "median_delay_s": 3.102,
+        "min_delay_s": 2.855,
+        "max_delay_s": 3.817,
+        "healthy_control_alert_observations": 0,
+        "healthy_control_observations": 233
+      },
+      {
+        "method": "zwatch",
+        "detected": 9,
+        "trials": 9,
+        "median_delay_s": 2.949,
+        "min_delay_s": 2.855,
+        "max_delay_s": 3.817,
+        "healthy_control_alert_observations": 0,
+        "healthy_control_observations": 233
+      }
+    ],
+    "hypotheses_matching_injected_component": 9,
+    "fault_trials": 9,
+    "recovery_verified": 3,
+    "recovery_attempts": 3,
+    "generated_submissions": 8089,
+    "submission_errors": 0,
+    "duplicate_requests_verified": 813,
+    "max_service_rss_mib": 164.54,
+    "max_trial_analysis_p95_ms": 42.76
+  },
+  "limitations": [
+    "Small fixed-scenario laboratory benchmark",
+    "Evidence rules rather than learned diagnosis",
+    "Shared deployment owner token",
+    "Single VM; no production HA or field pilot",
+    "Short laboratory SLO windows; not production false-alert rates"
+  ]
+}
