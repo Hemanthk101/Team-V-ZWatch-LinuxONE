@@ -1,0 +1,58 @@
+name: Engineering checks
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  application:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: '3.12'
+          cache: pip
+      - name: Install application dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Start isolated services
+        env:
+          ZWATCH_KEY_FILE: data/.access-token
+        run: |
+          mkdir -p data/transaction-lab
+          python - <<'PY'
+          import os, secrets
+          for path in ('data/.access-token', 'data/transaction-lab/.internal-key'):
+              fd = os.open(path, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
+              with os.fdopen(fd, 'w') as stream:
+                  stream.write(secrets.token_urlsafe(36))
+          PY
+          python -m uvicorn transaction_lab.authapp:app --host 127.0.0.1 --port 38902 > /tmp/zwatch-auth.log 2>&1 &
+          python -m uvicorn transaction_lab.labapp:app --host 127.0.0.1 --port 38901 > /tmp/zwatch-lab.log 2>&1 &
+          python -m uvicorn app:app --host 127.0.0.1 --port 38900 > /tmp/zwatch-api.log 2>&1 &
+          python - <<'PY'
+          import time, urllib.request
+          for attempt in range(60):
+              try:
+                  urllib.request.urlopen('http://127.0.0.1:38900/healthz', timeout=2)
+                  break
+              except Exception:
+                  time.sleep(1)
+          else:
+              raise SystemExit('Dashboard did not become ready')
+          PY
+      - name: Run correctness and authenticated integration checks
+        env:
+          ZWATCH_TEST_URL: http://127.0.0.1:38900
+          ZWATCH_KEY_FILE: data/.access-token
+        run: python -m unittest discover -s tests -v
+      - name: Service diagnostics on failure
+        if: failure()
+        run: cat /tmp/zwatch-auth.log /tmp/zwatch-lab.log /tmp/zwatch-api.log

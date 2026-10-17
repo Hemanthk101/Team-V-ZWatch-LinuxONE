@@ -9,6 +9,7 @@ import psutil
 from fastapi import Depends, FastAPI, Header, HTTPException, Request
 from fastapi.responses import FileResponse, Response
 from pydantic import BaseModel, Field
+from transaction_lab.common import request_json as lab_request
 from engine import (
     Detector,
     FEATURES,
@@ -291,7 +292,7 @@ async def lifespan(app):
 
 app = FastAPI(
     title="ZWatch | Team V",
-    version="1.0.0",
+    version="2.0.0",
     lifespan=lifespan,
     docs_url=None,
     redoc_url=None,
@@ -325,6 +326,120 @@ def authorized(authorization: str | None = Header(default=None)):
 @app.get("/")
 def home():
     return FileResponse(ROOT / "static" / "index.html")
+
+
+@app.get("/transactions")
+def transaction_console():
+    return FileResponse(ROOT / "static" / "transactions.html")
+
+
+# Fixed loopback destination and explicit routes prevent arbitrary HTTP proxying.
+# The internal key is separate from the dashboard token and never reaches JS.
+def laboratory_call(path, method="GET", body=None):
+    import urllib.error
+
+    try:
+        result = lab_request("http://127.0.0.1:38901" + path, method, body, timeout=4)
+    except urllib.error.HTTPError as error:
+        if error.code in (409, 422, 429):
+            try:
+                detail = json.loads(error.read()).get(
+                    "detail", "Laboratory rejected request"
+                )
+            except Exception:
+                detail = "Laboratory rejected request"
+            raise HTTPException(error.code, detail) from error
+        raise HTTPException(
+            503, "Transaction laboratory service is unavailable"
+        ) from error
+    except (OSError, TimeoutError) as error:
+        raise HTTPException(
+            503, "Transaction laboratory service is unavailable; health is unknown"
+        ) from error
+    if method == "POST":
+        audit(
+            "laboratory_action",
+            {"path": path, "request": body, "actor": "deployment_owner"},
+        )
+    return result
+
+
+@app.get("/api/transaction-lab/state", dependencies=[Depends(authorized)])
+def transaction_lab_state():
+    return laboratory_call("/state")
+
+
+@app.get("/api/transaction-lab/trace/{trace_id}", dependencies=[Depends(authorized)])
+def transaction_lab_trace(trace_id: str):
+    import re
+
+    if not re.fullmatch(r"[0-9a-f]{32}", trace_id):
+        raise HTTPException(422, "Trace ID must be 32 hexadecimal characters")
+    return laboratory_call("/traces/" + trace_id)
+
+
+from transaction_lab.labapp import Fault, Load, Proposal, Approval
+
+
+@app.post("/api/transaction-lab/load", dependencies=[Depends(authorized)])
+def transaction_lab_load(body: Load):
+    return laboratory_call("/control/load", "POST", body.model_dump())
+
+
+@app.post("/api/transaction-lab/stop", dependencies=[Depends(authorized)])
+def transaction_lab_stop():
+    return laboratory_call("/control/stop", "POST", {})
+
+
+@app.post("/api/transaction-lab/fault", dependencies=[Depends(authorized)])
+def transaction_lab_fault(body: Fault):
+    return laboratory_call("/control/fault", "POST", body.model_dump())
+
+
+@app.post("/api/transaction-lab/clear", dependencies=[Depends(authorized)])
+def transaction_lab_clear():
+    return laboratory_call("/control/clear", "POST", {})
+
+
+@app.post("/api/transaction-lab/recovery/propose", dependencies=[Depends(authorized)])
+def transaction_lab_propose(body: Proposal):
+    return laboratory_call("/recovery/propose", "POST", body.model_dump())
+
+
+@app.post("/api/transaction-lab/recovery/approve", dependencies=[Depends(authorized)])
+def transaction_lab_approve(body: Approval):
+    return laboratory_call("/recovery/approve", "POST", body.model_dump())
+
+
+@app.get("/api/transaction-lab/export", dependencies=[Depends(authorized)])
+def transaction_lab_export():
+    return Response(
+        json.dumps(laboratory_call("/state"), indent=2),
+        media_type="application/json",
+        headers={
+            "Content-Disposition": 'attachment; filename="zwatch-transaction-evidence.json"'
+        },
+    )
+
+
+@app.get("/api/transaction-lab/benchmark", dependencies=[Depends(authorized)])
+def transaction_lab_benchmark():
+    path = DATA / "transaction-lab" / "benchmark.json"
+    if not path.exists():
+        raise HTTPException(404, "No measured transaction benchmark has been recorded")
+    try:
+        recorded = json.loads(path.read_text())
+    except (OSError, ValueError) as error:
+        raise HTTPException(
+            503, "Benchmark record is being updated; retry shortly"
+        ) from error
+    return {
+        **{k: v for k, v in recorded.items() if k != "trials"},
+        "trials": [
+            {k: v for k, v in trial.items() if k != "observations"}
+            for trial in recorded["trials"]
+        ],
+    }
 
 
 @app.get("/healthz")

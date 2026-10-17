@@ -1,14 +1,26 @@
-# ZWatch - Team V
+# ZWatch - Transaction reliability on LinuxONE / Team V
 
-**Local anomaly intelligence for LinuxONE operations.** Built for IBM Z Datathon 2026 under Real-Time AI for Critical Decisions / System Anomaly Detection.
+**Observe transaction failures, investigate dependency evidence, and verify a controlled recovery.** Built for IBM Z Datathon 2026 under Real-Time AI for Critical Decisions / System Anomaly Detection.
 
-ZWatch collects real Linux system metrics, scores unusual resource behavior locally with Isolation Forest, confirms sustained signals, and turns them into explainable incidents with human review runbooks. A separate replay model demonstrates five failure patterns and a healthy control without stressing the actual VM.
+ZWatch now includes an isolated transaction service, durable queue, separate HTTP authorization simulator, dependency timings, deadline accounting, evidence-ranked incident hypotheses, and an approval/verification workflow for one bounded test recovery action. Generated requests exercise real services; no real payments are processed. The original host monitor and its separate synthetic Isolation Forest replay remain available.
 
-![ZWatch failure replay dashboard](docs/failure-replay.png)
+**Current implementation:** [transaction reliability design and reproduction](docs/transaction-reliability.md), [remaining implementation stages](docs/implementation-roadmap.md).
 
-**Submission materials:** [pitch deck](docs/Team-V-ZWatch-Pitch.pdf), [architecture](docs/architecture.svg), [evaluation JSON](evidence/evaluation.json), [submission draft](docs/submission-answers.md).
+**Original prototype materials:** [v1 pitch deck](docs/Team-V-ZWatch-Pitch.pdf), [v1 architecture](docs/architecture.svg), [synthetic replay evaluation](evidence/evaluation.json), [v1 submission draft](docs/submission-answers.md). These describe the earlier host-monitor prototype; final submission materials will be refreshed after the project is finalized.
 
-**Watch:** [90-second caption-led demo MP4](docs/Team-V-ZWatch-Demo.mp4). The recording shows the actual working application and keeps synthetic data labels visible. [Demo walkthrough and judging Q&A](docs/demo-guide.md).
+The previously recorded v1 video is historical. New video production is on hold until the owner finalizes the project.
+
+## Transaction reliability milestone
+
+- Separate processes for dashboard, transaction queue/investigator, and HTTP authorization dependency; each listener binds to VM loopback.
+- Durable idempotent acceptance, conflicting-key rejection, bounded backlog, atomic posting/completion, and interrupted-work recovery.
+- Actual pool-acquisition and HTTP timings with propagated trace IDs; local structured spans, not yet OTLP export.
+- Mature request cohorts include unfinished work in deadline misses. Low request volume and stale data are explicit states.
+- Host thresholds, service thresholds, accelerated SLO burn alerts, and evidence-plus-persistence investigation observe the same workload.
+- Pool exhaustion, dependency delay, and paused consumers affect only the laboratory and expire automatically.
+- One proposal/approval action releases only deliberately injected connection leases; current diagnosis and expiry are rechecked before execution.
+- Recovery checks a mature recent cohort, unfinished-work age, and local posting consistency while preserving earlier misses.
+- Incidents, proposals, action events, transactions, and postings persist across process restarts. Tests cover concurrency, atomic rollback, idempotency, restart recovery, authorization, and approval preconditions.
 
 ## What works
 
@@ -22,7 +34,7 @@ ZWatch collects real Linux system metrics, scores unusual resource behavior loca
 
 ## Honest scope
 
-This is a production-oriented single-VM prototype, not a production-certified monitoring platform. Synthetic replay accuracy does not establish real-world accuracy. The live baseline is intentionally short for a demo and must be replaced with a longer, vetted representative baseline for operations. Explanations report baseline deviations, not proven root causes. No automated remediation is executed.
+This is a production-oriented single-VM prototype, not a production-certified monitoring platform. Synthetic replay accuracy and controlled laboratory failures do not establish real-world accuracy. The host monitor's live baseline is intentionally short and needs representative operational history. Transaction investigation uses reviewable evidence rules rather than a fitted ML model; hypotheses are not proven root causes. The only executable recovery action operates on the test injector's own pool leases after explicit operator approval.
 
 The deployment runs Python AI inference on IBM LinuxONE / s390x CPU. It does not use or claim Telum acceleration, protected execution, high availability, or confidential computing. VM system counters are read from inside a container; the root filesystem metric refers to its root filesystem, not every host volume.
 
@@ -41,10 +53,9 @@ The first start creates `.access-token` (owner-only permissions on Linux). Read 
 
 ## LinuxONE deployment
 
-The included Dockerfile pins the IBM sample environment image by digest and adds FastAPI/Uvicorn. The accompanying `requirements-lock.txt` records the exact versions used for the running demo. A locked image rebuild can replace the package ranges with those versions after review.
+The Dockerfile pins the IBM sample environment image by digest and installs the exact versions in `requirements-lock.txt`. The deployment starts the dashboard and both laboratory dependencies with explicit resource limits.
 
 ```bash
-docker build -t zwatch:1.0 .
 mkdir -p data
 bash deploy.sh
 # From your workstation, open an encrypted tunnel:
@@ -52,7 +63,7 @@ ssh -N -L 38900:127.0.0.1:38900 -i YOUR_PRIVATE_KEY linux1@YOUR_VM_IP
 # Open http://127.0.0.1:38900 and enter the token stored on the VM in data/.access-token.
 ```
 
-The deployment binds to VM loopback and uses an encrypted SSH tunnel for workstation access. `deploy.sh` preserves the data directory while replacing only the named application container. Run it as a user authorized to use Docker. For production multi-user access, terminate HTTPS with an approved reverse proxy and use organizational SSO/RBAC. All inference and telemetry storage remain on LinuxONE. No cloud AI API or paid model is required.
+The deployment binds to VM loopback and uses an encrypted SSH tunnel for workstation access. Open `/transactions` for the new console and `/` for the original monitor. `deploy.sh` preserves the data directory while replacing the named application and laboratory containers. Run it as a user authorized to use Docker. Multi-user deployment requires organizational SSO/RBAC and HTTPS. All inference and telemetry storage remain on LinuxONE. No cloud AI API or paid model is required.
 
 ## Demo in under three minutes
 
