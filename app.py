@@ -191,12 +191,18 @@ def authorized(authorization:str|None=Header(default=None)):
 def home(): return FileResponse(ROOT/'static'/'index.html')
 
 @app.get('/healthz')
-def health(): return {'status':'ok','service':'zwatch'}
+def health():
+    if live_state['last_error']:
+        return Response(json.dumps({'status':'degraded','service':'zwatch'}),status_code=503,media_type='application/json')
+    if live and (datetime.now(timezone.utc)-datetime.fromisoformat(live[-1]['timestamp'])).total_seconds()>10:
+        return Response(json.dumps({'status':'stale','service':'zwatch'}),status_code=503,media_type='application/json')
+    return {'status':'ok','service':'zwatch'}
 
 @app.get('/api/state',dependencies=[Depends(authorized)])
 def state():
     with lock:
-        return {'live':list(live),'simulation':list(demo), 'live_state':live_state.copy(),
+        age=(datetime.now(timezone.utc)-datetime.fromisoformat(live[-1]['timestamp'])).total_seconds() if live else None
+        return {'live':list(live),'simulation':list(demo), 'live_state':{**live_state,'sample_age_s':age},
                 'replay':demo_status.copy(), 'incidents':{'live':[i.copy() for i in live_tracker.incidents[-12:]],
                 'simulation':[i.copy() for i in demo_tracker.incidents[-12:]]},
                 'model':{'live':live_detector.info if live_detector else None,'simulation':demo_detector.info},

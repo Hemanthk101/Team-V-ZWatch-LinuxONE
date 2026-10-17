@@ -1,0 +1,14 @@
+* text=auto
+*.py text eol=lf
+*.html text eol=lf
+*.md text eol=lf
+*.txt text eol=lf
+*.json text eol=lf
+*.ipynb text eol=lf
+*.svg text eol=lf
+Dockerfile text eol=lf
+*.pdf -text
+*.png -text
+*.jpg -text
+*.mp4 -text
+*.webm -text
