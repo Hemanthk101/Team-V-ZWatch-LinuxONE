@@ -8,6 +8,8 @@ ZWatch collects real Linux system metrics, scores unusual resource behavior loca
 
 **Submission materials:** [pitch deck](docs/Team-V-ZWatch-Pitch.pdf), [architecture](docs/architecture.svg), [evaluation JSON](evidence/evaluation.json), [submission draft](docs/submission-answers.md).
 
+**Watch:** [90-second caption-led demo MP4](docs/Team-V-ZWatch-Demo.mp4). The recording shows the actual working application and keeps synthetic data labels visible. [Demo walkthrough and judging Q&A](docs/demo-guide.md).
+
 ## What works
 
 - Live CPU, memory, root filesystem, network rate, load per CPU, and I/O wait collection using psutil.
